@@ -7,6 +7,7 @@ import {
   removeCartItem,
   updateCartItemQuantity,
 } from "../../../utils/cart";
+import { setupThemeToggle } from "../../../utils/theme";
 import type { CartItem } from "../../../types/product";
 
 const cartItemsContainer = document.getElementById("cartItems") as HTMLDivElement;
@@ -91,4 +92,5 @@ clearCartButton.addEventListener("click", () => {
   renderCart();
 });
 
+setupThemeToggle();
 renderCart();

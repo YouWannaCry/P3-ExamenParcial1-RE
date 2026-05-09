@@ -2,6 +2,7 @@ import "../../../style.css";
 import { PRODUCTS, getCategories } from "../../../data/data";
 import type { Product } from "../../../types/product";
 import { addProductToCart, getCartQuantity } from "../../../utils/cart";
+import { setupThemeToggle } from "../../../utils/theme";
 
 const productGrid = document.getElementById("productGrid") as HTMLDivElement;
 const categoryList = document.getElementById("categoryList") as HTMLDivElement;
@@ -153,4 +154,5 @@ searchInput.addEventListener("input", () => {
 });
 
 updateCartCount();
+setupThemeToggle();
 renderPage();
