@@ -203,7 +203,16 @@ button:disabled {
   background: var(--accent-soft);
 }
 
+:root[data-theme="dark"] .theme-switch-track {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 .theme-switch input:checked + .theme-switch-track .theme-switch-thumb {
+  transform: translateX(28px);
+}
+
+:root[data-theme="dark"] .theme-switch-thumb {
   transform: translateX(28px);
 }
 
