@@ -1,4 +1,3 @@
-import "../../../style.css";
 import { PRODUCTS } from "../../../data/data";
 import {
   clearCart,

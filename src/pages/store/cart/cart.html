@@ -5,6 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Food Store | Carrito</title>
+  <script>
+    const savedTheme = localStorage.getItem("foodStoreTheme");
+    document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
+  </script>
+  <link rel="stylesheet" href="../../../style.css" />
 </head>
 
 <body>
@@ -19,8 +24,8 @@
       <label class="theme-switch" aria-label="Cambiar tema">
         <input id="themeToggle" type="checkbox" />
         <span class="theme-switch-track" aria-hidden="true">
-          <span class="theme-icon theme-icon-sun">☀</span>
-          <span class="theme-icon theme-icon-moon">☾</span>
+          <span class="theme-icon theme-icon-sun">&#9728;</span>
+          <span class="theme-icon theme-icon-moon">&#9790;</span>
           <span class="theme-switch-thumb"></span>
         </span>
       </label>

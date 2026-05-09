@@ -1,4 +1,3 @@
-import "../../../style.css";
 import { PRODUCTS, getCategories } from "../../../data/data";
 import type { Product } from "../../../types/product";
 import { addProductToCart, getCart, getCartQuantity } from "../../../utils/cart";
