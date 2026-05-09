@@ -1,7 +1,7 @@
 import "../../../style.css";
 import { PRODUCTS, getCategories } from "../../../data/data";
 import type { Product } from "../../../types/product";
-import { addProductToCart, getCartQuantity } from "../../../utils/cart";
+import { addProductToCart, getCart, getCartQuantity } from "../../../utils/cart";
 import { setupThemeToggle } from "../../../utils/theme";
 
 const productGrid = document.getElementById("productGrid") as HTMLDivElement;
@@ -82,17 +82,27 @@ function renderCategories(): void {
 function renderProducts(products: Product[]): void {
   productGrid.innerHTML = "";
   emptyMessage.hidden = products.length > 0;
+  const cart = getCart();
 
   products.forEach((product) => {
     const categoryName = product.categorias[0]?.nombre ?? "Sin categoria";
+    const cartQuantity = cart.find((item) => item.id === product.id)?.cantidad ?? 0;
+    const availableQuantity = Math.max(0, product.stock - cartQuantity);
+    const canAddProduct = product.disponible && availableQuantity > 0;
     const card = document.createElement("article");
     card.className = "product-card";
 
-    const badgeClass = product.disponible ? "stock-badge" : "stock-badge is-disabled";
-    const buttonText = product.disponible ? "Agregar" : "Sin stock";
+    const badgeClass = canAddProduct ? "stock-badge" : "stock-badge is-disabled";
+    const buttonText = canAddProduct ? "Agregar" : "Sin stock";
+    const stockText = canAddProduct
+      ? `${availableQuantity} disponibles`
+      : product.disponible
+        ? "Stock agregado"
+        : "No disponible";
 
     card.innerHTML = `
-      <div class="product-media" aria-hidden="true">
+      <div class="product-media">
+        <img src="${product.imagen}" alt="${product.nombre}" loading="lazy" />
         <span>${categoryName.slice(0, 2).toUpperCase()}</span>
       </div>
       <div class="product-content">
@@ -104,11 +114,23 @@ function renderProducts(products: Product[]): void {
         <div class="product-footer">
           <div>
             <strong>${formatPrice(product.precio)}</strong>
-            <span class="${badgeClass}">${product.disponible ? `${product.stock} disponibles` : "No disponible"}</span>
+            <span class="${badgeClass}">${stockText}</span>
           </div>
-          <button class="primary-button" type="button" ${product.disponible ? "" : "disabled"} data-product-id="${product.id}">
-            ${buttonText}
-          </button>
+          <div class="add-product-controls">
+            <label for="quantity-${product.id}">Cantidad</label>
+            <input
+              id="quantity-${product.id}"
+              type="number"
+              min="1"
+              max="${availableQuantity}"
+              value="${canAddProduct ? 1 : 0}"
+              ${canAddProduct ? "" : "disabled"}
+              data-quantity-for="${product.id}"
+            />
+            <button class="primary-button" type="button" ${canAddProduct ? "" : "disabled"} data-product-id="${product.id}">
+              ${buttonText}
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -125,9 +147,36 @@ function renderProducts(products: Product[]): void {
         return;
       }
 
-      addProductToCart(product);
+      const quantityInput = productGrid.querySelector<HTMLInputElement>(
+        `[data-quantity-for="${product.id}"]`
+      );
+      const currentQuantity = getCart().find((item) => item.id === product.id)?.cantidad ?? 0;
+      const availableQuantity = Math.max(0, product.stock - currentQuantity);
+      const inputQuantity = Number(quantityInput?.value ?? 1);
+      const requestedQuantity = Number.isFinite(inputQuantity) ? Math.max(1, inputQuantity) : 1;
+      const quantityToAdd = Math.min(requestedQuantity, availableQuantity);
+
+      if (availableQuantity === 0) {
+        showToast(`Ya agregaste todo el stock de ${product.nombre}`);
+        renderPage();
+        return;
+      }
+
+      addProductToCart(product, quantityToAdd);
       updateCartCount();
-      showToast(`${product.nombre} agregado al carrito`);
+      showToast(
+        quantityToAdd === requestedQuantity
+          ? `${quantityToAdd} ${product.nombre} agregado al carrito`
+          : `Solo se agregaron ${quantityToAdd}; no hay mas stock`
+      );
+      renderPage();
+    });
+  });
+
+  productGrid.querySelectorAll<HTMLImageElement>(".product-media img").forEach((image) => {
+    image.addEventListener("error", () => {
+      image.parentElement?.classList.add("is-fallback");
+      image.remove();
     });
   });
 }

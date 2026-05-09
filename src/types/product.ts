@@ -18,6 +18,7 @@ export interface CartItem {
   nombre: string;
   precio: number;
   cantidad: number;
+  stock: number;
   imagen: string;
   categoria: string;
 }

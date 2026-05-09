@@ -5,12 +5,14 @@ Aplicacion frontend desarrollada con Vite y TypeScript para la Evaluacion 1 de P
 ## Funcionalidades
 
 - Catalogo de productos renderizado dinamicamente desde datos locales.
+- Imagenes fijas y representativas por categoria de producto.
 - Busqueda de productos por nombre.
 - Filtro por categorias.
 - Agregado de productos al carrito.
+- Selector de cantidad en el catalogo con limite por stock disponible.
 - Persistencia del carrito en `localStorage`.
 - Vista de carrito con nombre, precio, cantidad, subtotales y total general.
-- Controles para aumentar, disminuir, quitar productos y vaciar el carrito.
+- Controles para aumentar, disminuir, editar cantidades, quitar productos y vaciar el carrito.
 - Modo claro/oscuro persistente para catalogo y carrito.
 - Redireccion de fallback para evitar bucles al ingresar a rutas incorrectas.
 

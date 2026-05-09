@@ -364,12 +364,21 @@ h3 {
 }
 
 .product-media {
+  position: relative;
   display: grid;
   min-height: 150px;
+  overflow: hidden;
   place-items: center;
   background:
     radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.45), transparent 32%),
     linear-gradient(135deg, #d94f38, #f3b34c 55%, #1f7a4d);
+}
+
+.product-media img {
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  object-fit: cover;
 }
 
 .product-media span,
@@ -383,9 +392,14 @@ h3 {
 }
 
 .product-media span {
+  display: none;
   width: 74px;
   height: 74px;
   font-size: 1.3rem;
+}
+
+.product-media.is-fallback span {
+  display: grid;
 }
 
 .product-content {
@@ -404,6 +418,43 @@ h3 {
 .product-footer {
   justify-content: space-between;
   gap: 12px;
+}
+
+.add-product-controls {
+  display: grid;
+  grid-template-columns: minmax(78px, 92px) minmax(96px, auto);
+  gap: 8px;
+  align-items: end;
+}
+
+.add-product-controls label {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.add-product-controls input,
+.quantity-control input {
+  min-height: 42px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 900;
+  outline: none;
+  text-align: center;
+}
+
+.add-product-controls input {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.add-product-controls input:focus,
+.quantity-control input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(31, 122, 77, 0.14);
 }
 
 .product-footer strong {
@@ -508,11 +559,27 @@ h3 {
 }
 
 .cart-thumb {
+  position: relative;
   width: 54px;
   height: 54px;
   flex: 0 0 54px;
+  overflow: hidden;
   background: var(--accent-soft);
   color: var(--text);
+}
+
+.cart-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-thumb span {
+  display: none;
+}
+
+.cart-thumb.is-fallback span {
+  display: grid;
 }
 
 .cart-item h2 {
@@ -541,12 +608,10 @@ h3 {
   font-weight: 900;
 }
 
-.quantity-control span {
-  display: inline-grid;
-  min-width: 42px;
-  height: 40px;
-  place-items: center;
-  font-weight: 900;
+.quantity-control input {
+  width: 58px;
+  border-width: 0 1px;
+  border-radius: 0;
 }
 
 .total-panel {
@@ -604,5 +669,9 @@ h3 {
   .product-footer {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .add-product-controls {
+    grid-template-columns: 1fr;
   }
 }
