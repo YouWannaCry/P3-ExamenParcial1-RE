@@ -639,7 +639,7 @@ h3 {
 
 .cart-item {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) auto auto auto;
+  grid-template-columns: minmax(220px, 1fr) 146px minmax(116px, auto) auto;
   gap: 18px;
   align-items: center;
   padding: 16px;
@@ -690,6 +690,8 @@ h3 {
   display: grid;
   grid-template-columns: 40px 64px 40px;
   width: 146px;
+  min-width: 146px;
+  max-width: 146px;
   flex: 0 0 146px;
   overflow: hidden;
   border: 1px solid var(--border-strong);
@@ -699,7 +701,9 @@ h3 {
 
 .quantity-control button {
   width: 40px;
+  min-width: 40px;
   height: 40px;
+  padding: 0;
   border: 0;
   background: var(--accent-soft);
   color: var(--accent-strong);
@@ -709,8 +713,21 @@ h3 {
 .quantity-control input {
   width: 64px;
   min-width: 64px;
+  max-width: 64px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
   border-width: 0 1px;
   border-radius: 0;
+  appearance: textfield;
+  font-variant-numeric: tabular-nums;
+  line-height: 40px;
+}
+
+.quantity-control input::-webkit-inner-spin-button,
+.quantity-control input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
 }
 
 .total-panel {
