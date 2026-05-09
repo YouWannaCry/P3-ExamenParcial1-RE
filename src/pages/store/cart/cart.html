@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Store | Carrito</title>
+</head>
+
+<body>
+  <header class="store-header">
+    <a class="brand" href="../home/home.html" aria-label="Food Store">
+      <span class="brand-mark">FS</span>
+      <span>Food Store</span>
+    </a>
+    <nav class="store-nav" aria-label="Navegacion principal">
+      <a href="../home/home.html">Catalogo</a>
+      <a class="cart-link" href="./cart.html" aria-current="page">Carrito <span id="cartCount">0</span></a>
+    </nav>
+  </header>
+
+  <main class="cart-shell">
+    <section class="cart-section" aria-labelledby="cartTitle">
+      <div class="cart-heading">
+        <div>
+          <p class="eyebrow">Resumen</p>
+          <h1 id="cartTitle">Carrito de compras</h1>
+        </div>
+        <a class="secondary-button" href="../home/home.html">Seguir comprando</a>
+      </div>
+
+      <div id="cartItems" class="cart-items"></div>
+      <p id="emptyCartMessage" class="empty-state" hidden>El carrito esta vacio. Agrega productos desde el catalogo.</p>
+    </section>
+
+    <aside class="total-panel" aria-label="Total del carrito">
+      <p class="eyebrow">Total</p>
+      <strong id="cartTotal">$ 0</strong>
+      <button id="clearCartButton" class="danger-button" type="button">Vaciar carrito</button>
+    </aside>
+  </main>
+
+  <script type="module" src="./cart.ts"></script>
+</body>
+
+</html>

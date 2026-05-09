@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Store | Catalogo</title>
+</head>
+
+<body>
+  <header class="store-header">
+    <a class="brand" href="./home.html" aria-label="Food Store">
+      <span class="brand-mark">FS</span>
+      <span>Food Store</span>
+    </a>
+    <nav class="store-nav" aria-label="Navegacion principal">
+      <a href="./home.html" aria-current="page">Catalogo</a>
+      <a class="cart-link" href="../cart/cart.html">Carrito <span id="cartCount">0</span></a>
+    </nav>
+  </header>
+
+  <main class="store-shell">
+    <aside class="filters-panel" aria-label="Filtros de productos">
+      <div>
+        <p class="eyebrow">Categorias</p>
+        <h1>Catalogo</h1>
+      </div>
+      <div id="categoryList" class="category-list"></div>
+    </aside>
+
+    <section class="catalog-section" aria-labelledby="catalogTitle">
+      <div class="catalog-toolbar">
+        <div>
+          <p class="eyebrow">Productos disponibles</p>
+          <h2 id="catalogTitle">Elegidos de la casa</h2>
+        </div>
+        <label class="search-control" for="searchInput">
+          <span>Buscar</span>
+          <input id="searchInput" type="search" autocomplete="off" placeholder="Pizza, hamburguesa..." />
+        </label>
+      </div>
+
+      <p id="activeFilter" class="active-filter"></p>
+      <div id="productGrid" class="product-grid"></div>
+      <p id="emptyMessage" class="empty-state" hidden>No se encontraron productos para la busqueda seleccionada.</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./home.ts"></script>
+</body>
+
+</html>
