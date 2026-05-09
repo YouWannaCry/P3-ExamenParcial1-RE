@@ -23,6 +23,9 @@
   --text-strong: #111a14;
   --toast-bg: #17211b;
   --toast-text: #ffffff;
+  --product-card-width: 280px;
+  --product-card-height: 520px;
+  --product-media-height: 180px;
   color: var(--text);
   background: var(--bg);
   font-family:
@@ -427,14 +430,21 @@ h3 {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, var(--product-card-width));
+  align-items: stretch;
+  justify-content: start;
   gap: 18px;
 }
 
 .product-card {
   display: grid;
-  grid-template-rows: 170px 1fr;
-  height: 460px;
+  grid-template-rows: var(--product-media-height) 1fr;
+  width: var(--product-card-width);
+  height: var(--product-card-height);
+  min-width: var(--product-card-width);
+  max-width: var(--product-card-width);
+  min-height: var(--product-card-height);
+  max-height: var(--product-card-height);
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -445,7 +455,10 @@ h3 {
 .product-media {
   position: relative;
   display: grid;
-  height: 170px;
+  width: 100%;
+  height: var(--product-media-height);
+  min-height: var(--product-media-height);
+  max-height: var(--product-media-height);
   overflow: hidden;
   place-items: center;
   background:
@@ -482,11 +495,9 @@ h3 {
 }
 
 .product-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 1fr auto;
   gap: 18px;
-  min-height: 0;
   padding: 18px;
 }
 
@@ -495,12 +506,15 @@ h3 {
   line-height: 1.5;
 }
 
-.product-content > div:first-child > p:not(.product-category) {
+.product-content > div:first-child {
+  min-height: 0;
+}
+
+.product-content > div:first-child > p:last-child {
   display: -webkit-box;
-  min-height: 48px;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
 }
 
 .product-footer {
@@ -788,6 +802,10 @@ h3 {
 }
 
 @media (max-width: 560px) {
+  :root {
+    --product-card-width: 100%;
+  }
+
   .store-header {
     align-items: flex-start;
     flex-direction: column;

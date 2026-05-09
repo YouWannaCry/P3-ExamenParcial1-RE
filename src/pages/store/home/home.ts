@@ -16,6 +16,21 @@ let selectedCategoryId = 0;
 let searchTerm = "";
 let toastTimer = 0;
 
+type ProductCardData = {
+  id: number;
+  name: string;
+  description: string;
+  categoryName: string;
+  categoryInitials: string;
+  image: string;
+  priceText: string;
+  stockText: string;
+  badgeClass: string;
+  buttonText: string;
+  availableQuantity: number;
+  canAddProduct: boolean;
+};
+
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
   currency: "ARS",
@@ -103,14 +118,12 @@ function renderCategories(): void {
   });
 }
 
-function createProductCard(product: Product): HTMLElement {
+function getProductCardData(product: Product): ProductCardData {
   const cart = getCart();
   const categoryName = product.categorias[0]?.nombre ?? "Sin categoria";
   const cartQuantity = cart.find((item) => item.id === product.id)?.cantidad ?? 0;
   const availableQuantity = Math.max(0, product.stock - cartQuantity);
   const canAddProduct = product.disponible && availableQuantity > 0;
-  const card = document.createElement("article");
-  card.className = "product-card";
 
   const badgeClass = canAddProduct ? "stock-badge" : "stock-badge is-disabled";
   const buttonText = canAddProduct ? "Agregar" : "Sin stock";
@@ -120,35 +133,55 @@ function createProductCard(product: Product): HTMLElement {
       ? "Stock agregado"
       : "No disponible";
 
+  return {
+    id: product.id,
+    name: product.nombre,
+    description: product.descripcion,
+    categoryName,
+    categoryInitials: categoryName.slice(0, 2).toUpperCase(),
+    image: product.imagen,
+    priceText: formatPrice(product.precio),
+    stockText,
+    badgeClass,
+    buttonText,
+    availableQuantity,
+    canAddProduct,
+  };
+}
+
+function createProductCard(cardData: ProductCardData): HTMLElement {
+  const card = document.createElement("article");
+  card.className = "product-card";
+
   card.innerHTML = `
     <div class="product-media">
-      <img src="${product.imagen}" alt="${product.nombre}" loading="lazy" />
-      <span>${categoryName.slice(0, 2).toUpperCase()}</span>
+      <img src="${cardData.image}" alt="${cardData.name}" loading="lazy" />
+      <span>${cardData.categoryInitials}</span>
     </div>
     <div class="product-content">
       <div>
-        <p class="product-category">${categoryName}</p>
-        <h3>${product.nombre}</h3>
-        <p>${product.descripcion}</p>
+        <p class="product-category">${cardData.categoryName}</p>
+        <h3>${cardData.name}</h3>
+        <p>${cardData.description}</p>
       </div>
       <div class="product-footer">
         <div>
-          <strong>${formatPrice(product.precio)}</strong>
-          <span class="${badgeClass}">${stockText}</span>
+          <strong>${cardData.priceText}</strong>
+          <span class="${cardData.badgeClass}">${cardData.stockText}</span>
         </div>
         <div class="add-product-controls">
-          <label for="quantity-${product.id}">Cantidad</label>
+          <label for="quantity-${cardData.id}">Cantidad</label>
           <input
-            id="quantity-${product.id}"
+            id="quantity-${cardData.id}"
             type="number"
             min="1"
-            max="${availableQuantity}"
-            value="${canAddProduct ? 1 : 0}"
-            ${canAddProduct ? "" : "disabled"}
-            data-quantity-for="${product.id}"
+            max="${cardData.availableQuantity}"
+            value="${cardData.canAddProduct ? 1 : 0}"
+            ${cardData.canAddProduct ? "" : "disabled"}
+            data-quantity-for="${cardData.id}"
           />
-          <button class="primary-button" type="button" ${canAddProduct ? "" : "disabled"} data-product-id="${product.id}">
-            ${buttonText}
+          <button class="primary-button" type="button" ${cardData.canAddProduct ? "" : "disabled"} data-product-id="${cardData.id}">
+            ${cardData.buttonText}
           </button>
         </div>
       </div>
@@ -191,7 +224,7 @@ function renderProductSections(products: Product[]): void {
 
     const sectionGrid = section.querySelector(".product-grid") as HTMLDivElement;
     productsByCategory.forEach((product) => {
-      sectionGrid.appendChild(createProductCard(product));
+      sectionGrid.appendChild(createProductCard(getProductCardData(product)));
     });
 
     productGrid.appendChild(section);
