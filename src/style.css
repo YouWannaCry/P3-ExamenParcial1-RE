@@ -283,6 +283,7 @@ h3 {
 }
 
 .catalog-actions {
+  align-items: flex-end;
   justify-content: flex-end;
   gap: 12px;
 }
