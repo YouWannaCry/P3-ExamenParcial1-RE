@@ -12,6 +12,7 @@ import type { CartItem } from "../../../types/product";
 
 const cartItemsContainer = document.getElementById("cartItems") as HTMLDivElement;
 const emptyCartMessage = document.getElementById("emptyCartMessage") as HTMLParagraphElement;
+const cartNotice = document.getElementById("cartNotice") as HTMLParagraphElement;
 const cartTotal = document.getElementById("cartTotal") as HTMLElement;
 const cartTotalHeader = document.getElementById("cartTotalHeader") as HTMLSpanElement;
 const clearCartButton = document.getElementById("clearCartButton") as HTMLButtonElement;
@@ -72,34 +73,65 @@ function setupImageFallbacks(): void {
   });
 }
 
-function getCartWithValidStock(): CartItem[] {
+type CartValidationResult = {
+  cart: CartItem[];
+  priceWasUpdated: boolean;
+  cartWasUpdated: boolean;
+};
+
+function getValidatedCart(): CartValidationResult {
   const cart = getCart();
+  let priceWasUpdated = false;
+
   const validCart = cart
     .map((item) => {
       const product = PRODUCTS.find((product) => product.id === item.id);
       const stock = product?.stock ?? item.stock ?? item.cantidad;
+      const price = product?.precio ?? item.precio;
+      const productName = product?.nombre ?? item.nombre;
+      const productImage = product?.imagen ?? item.imagen;
+      const productCategory = product?.categorias[0]?.nombre ?? item.categoria;
+
+      if (price !== item.precio) {
+        priceWasUpdated = true;
+      }
 
       return {
         ...item,
+        nombre: productName,
+        precio: price,
         stock,
+        imagen: productImage,
+        categoria: productCategory,
         cantidad: Math.min(item.cantidad, stock),
       };
     })
     .filter((item) => item.cantidad > 0);
 
-  if (JSON.stringify(cart) !== JSON.stringify(validCart)) {
+  const cartWasUpdated = JSON.stringify(cart) !== JSON.stringify(validCart);
+
+  if (cartWasUpdated) {
     saveCart(validCart);
   }
 
-  return validCart;
+  return {
+    cart: validCart,
+    cartWasUpdated,
+    priceWasUpdated,
+  };
 }
 
 function renderCart(): void {
-  const cart = getCartWithValidStock();
+  const validation = getValidatedCart();
+  const cart = validation.cart;
   const isEmpty = cart.length === 0;
 
   cartItemsContainer.innerHTML = "";
   emptyCartMessage.hidden = !isEmpty;
+  cartNotice.hidden = !validation.cartWasUpdated;
+  cartNotice.textContent = validation.priceWasUpdated
+    ? "Se actualizaron los precios del carrito segun el catalogo vigente."
+    : "Se actualizo el carrito segun el stock disponible.";
   clearCartButton.disabled = isEmpty;
   const total = getCartTotal(cart);
 
@@ -112,7 +144,7 @@ function renderCart(): void {
 
   setupImageFallbacks();
 
-  cartItemsContainer.querySelectorAll<HTMLButtonElement>("[data-action]").forEach((button) => {
+  cartItemsContainer.querySelectorAll<HTMLButtonElement>("button[data-action]").forEach((button) => {
     button.addEventListener("click", () => {
       const productId = Number(button.dataset.productId);
       const action = button.dataset.action;
@@ -139,7 +171,7 @@ function renderCart(): void {
   cartItemsContainer
     .querySelectorAll<HTMLInputElement>('[data-action="set-quantity"]')
     .forEach((input) => {
-      input.addEventListener("change", () => {
+      const updateQuantityFromInput = () => {
         const productId = Number(input.dataset.productId);
         const product = PRODUCTS.find((product) => product.id === productId);
         const currentItem = getCart().find((item) => item.id === productId);
@@ -148,6 +180,13 @@ function renderCart(): void {
 
         updateCartItemQuantity(productId, quantity, stock);
         renderCart();
+      };
+
+      input.addEventListener("change", updateQuantityFromInput);
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          updateQuantityFromInput();
+        }
       });
     });
 }

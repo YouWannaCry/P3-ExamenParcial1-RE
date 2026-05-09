@@ -594,6 +594,16 @@ h3 {
   font-weight: 700;
 }
 
+.cart-notice {
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
 .toast {
   position: fixed;
   right: 18px;
@@ -677,6 +687,10 @@ h3 {
 }
 
 .quantity-control {
+  display: grid;
+  grid-template-columns: 40px 64px 40px;
+  width: 146px;
+  flex: 0 0 146px;
   overflow: hidden;
   border: 1px solid var(--border-strong);
   border-radius: 8px;
@@ -693,7 +707,8 @@ h3 {
 }
 
 .quantity-control input {
-  width: 58px;
+  width: 64px;
+  min-width: 64px;
   border-width: 0 1px;
   border-radius: 0;
 }

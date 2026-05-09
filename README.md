@@ -15,6 +15,7 @@ Aplicacion frontend desarrollada con Vite y TypeScript para la Evaluacion 1 de P
 - Persistencia del carrito en `localStorage`.
 - Vista de carrito con nombre, precio, cantidad, subtotales y total general.
 - Controles para aumentar, disminuir, editar cantidades, quitar productos y vaciar el carrito.
+- Validacion del carrito contra el catalogo para corregir precios o stock alterados en `localStorage`.
 - Modo claro/oscuro persistente para catalogo y carrito.
 - Redireccion de fallback para evitar bucles al ingresar a rutas incorrectas.
 

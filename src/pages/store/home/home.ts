@@ -1,6 +1,6 @@
 import { PRODUCTS, getCategories } from "../../../data/data";
 import type { Product } from "../../../types/product";
-import { addProductToCart, getCart, getCartTotal } from "../../../utils/cart";
+import { addProductToCart, getCart } from "../../../utils/cart";
 import { setupThemeToggle } from "../../../utils/theme";
 
 const productGrid = document.getElementById("productGrid") as HTMLDivElement;
@@ -27,7 +27,17 @@ function formatPrice(price: number): string {
 }
 
 function updateCartSummary(): void {
-  cartTotalHeader.textContent = formatPrice(getCartTotal(getCart()));
+  const trustedTotal = getCart().reduce((total, item) => {
+    const product = PRODUCTS.find((product) => product.id === item.id);
+
+    if (!product) {
+      return total;
+    }
+
+    return total + product.precio * Math.min(item.cantidad, product.stock);
+  }, 0);
+
+  cartTotalHeader.textContent = formatPrice(trustedTotal);
 }
 
 function showToast(message: string): void {
