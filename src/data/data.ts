@@ -48,17 +48,17 @@ const categorias: ICategory[] = [
 
 const CATEGORY_IMAGES = {
   bebidas:
-    "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=560&h=360&q=80",
   empanadas:
-    "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1773831061318-490f04ee6e07?auto=format&fit=crop&w=560&h=360&q=80",
   ensaladas:
-    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=560&h=360&q=80",
   hamburguesas:
-    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=560&h=360&q=80",
   pizzas:
-    "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=560&h=360&q=80",
   postres:
-    "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=560&h=360&q=80",
 };
 
 export const PRODUCTS: Product[] = [
