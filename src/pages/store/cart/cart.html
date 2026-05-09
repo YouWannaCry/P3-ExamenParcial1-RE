@@ -16,7 +16,14 @@
     <nav class="store-nav" aria-label="Navegacion principal">
       <a href="../home/home.html">Catalogo</a>
       <a class="cart-link" href="./cart.html" aria-current="page">Carrito <span id="cartCount">0</span></a>
-      <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">Modo oscuro</button>
+      <label class="theme-switch" aria-label="Cambiar tema">
+        <input id="themeToggle" type="checkbox" />
+        <span class="theme-switch-track" aria-hidden="true">
+          <span class="theme-icon theme-icon-sun">☀</span>
+          <span class="theme-icon theme-icon-moon">☾</span>
+          <span class="theme-switch-thumb"></span>
+        </span>
+      </label>
     </nav>
   </header>
 

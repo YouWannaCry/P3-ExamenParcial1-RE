@@ -133,7 +133,6 @@ button:disabled {
 }
 
 .store-nav a,
-.theme-toggle,
 .secondary-button {
   min-height: 40px;
   padding: 10px 14px;
@@ -149,9 +148,67 @@ button:disabled {
   color: var(--accent-strong);
 }
 
-.theme-toggle[aria-pressed="true"] {
+.theme-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 68px;
+  height: 40px;
+}
+
+.theme-switch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.theme-switch-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 68px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--button-surface);
+  color: var(--muted);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.theme-icon {
+  position: relative;
+  z-index: 1;
+  width: 18px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.theme-switch-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 8px 18px rgba(25, 36, 28, 0.18);
+  transition: transform 180ms ease;
+}
+
+.theme-switch input:checked + .theme-switch-track {
   border-color: var(--accent);
-  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.theme-switch input:checked + .theme-switch-track .theme-switch-thumb {
+  transform: translateX(28px);
+}
+
+.theme-switch input:focus-visible + .theme-switch-track {
+  box-shadow: 0 0 0 4px rgba(31, 122, 77, 0.18);
 }
 
 .cart-link {

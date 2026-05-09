@@ -11,28 +11,25 @@ function applyTheme(theme: Theme): void {
   localStorage.setItem(THEME_STORAGE_KEY, theme);
 }
 
-function updateThemeButton(button: HTMLButtonElement, theme: Theme): void {
-  const isDark = theme === "dark";
-
-  button.setAttribute("aria-pressed", String(isDark));
-  button.textContent = isDark ? "Modo claro" : "Modo oscuro";
+function updateThemeSwitch(input: HTMLInputElement, theme: Theme): void {
+  input.checked = theme === "dark";
 }
 
 export function setupThemeToggle(buttonId = "themeToggle"): void {
-  const button = document.getElementById(buttonId) as HTMLButtonElement | null;
+  const input = document.getElementById(buttonId) as HTMLInputElement | null;
   let currentTheme = getSavedTheme();
 
   applyTheme(currentTheme);
 
-  if (!button) {
+  if (!input) {
     return;
   }
 
-  updateThemeButton(button, currentTheme);
+  updateThemeSwitch(input, currentTheme);
 
-  button.addEventListener("click", () => {
-    currentTheme = currentTheme === "dark" ? "light" : "dark";
+  input.addEventListener("change", () => {
+    currentTheme = input.checked ? "dark" : "light";
     applyTheme(currentTheme);
-    updateThemeButton(button, currentTheme);
+    updateThemeSwitch(input, currentTheme);
   });
 }
