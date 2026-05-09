@@ -1,6 +1,6 @@
 import { PRODUCTS, getCategories } from "../../../data/data";
 import type { Product } from "../../../types/product";
-import { addProductToCart, getCart, getCartQuantity } from "../../../utils/cart";
+import { addProductToCart, getCart, getCartTotal } from "../../../utils/cart";
 import { setupThemeToggle } from "../../../utils/theme";
 
 const productGrid = document.getElementById("productGrid") as HTMLDivElement;
@@ -9,7 +9,7 @@ const categoryMenuButton = document.getElementById("categoryMenuButton") as HTML
 const searchInput = document.getElementById("searchInput") as HTMLInputElement;
 const emptyMessage = document.getElementById("emptyMessage") as HTMLParagraphElement;
 const activeFilter = document.getElementById("activeFilter") as HTMLParagraphElement;
-const cartCount = document.getElementById("cartCount") as HTMLSpanElement;
+const cartTotalHeader = document.getElementById("cartTotalHeader") as HTMLSpanElement;
 const toast = document.getElementById("toast") as HTMLDivElement;
 
 let selectedCategoryId = 0;
@@ -26,8 +26,8 @@ function formatPrice(price: number): string {
   return currencyFormatter.format(price);
 }
 
-function updateCartCount(): void {
-  cartCount.textContent = String(getCartQuantity());
+function updateCartSummary(): void {
+  cartTotalHeader.textContent = formatPrice(getCartTotal(getCart()));
 }
 
 function showToast(message: string): void {
@@ -212,7 +212,7 @@ function renderProductSections(products: Product[]): void {
       }
 
       addProductToCart(product, quantityToAdd);
-      updateCartCount();
+      updateCartSummary();
       showToast(
         quantityToAdd === requestedQuantity
           ? `${quantityToAdd} ${product.nombre} agregado al carrito`
@@ -253,6 +253,6 @@ searchInput.addEventListener("input", () => {
   renderPage();
 });
 
-updateCartCount();
+updateCartSummary();
 setupThemeToggle();
 renderPage();

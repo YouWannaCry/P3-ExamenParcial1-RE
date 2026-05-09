@@ -2,7 +2,6 @@ import { PRODUCTS } from "../../../data/data";
 import {
   clearCart,
   getCart,
-  getCartQuantity,
   getCartTotal,
   removeCartItem,
   saveCart,
@@ -14,7 +13,7 @@ import type { CartItem } from "../../../types/product";
 const cartItemsContainer = document.getElementById("cartItems") as HTMLDivElement;
 const emptyCartMessage = document.getElementById("emptyCartMessage") as HTMLParagraphElement;
 const cartTotal = document.getElementById("cartTotal") as HTMLElement;
-const cartCount = document.getElementById("cartCount") as HTMLSpanElement;
+const cartTotalHeader = document.getElementById("cartTotalHeader") as HTMLSpanElement;
 const clearCartButton = document.getElementById("clearCartButton") as HTMLButtonElement;
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
@@ -102,8 +101,10 @@ function renderCart(): void {
   cartItemsContainer.innerHTML = "";
   emptyCartMessage.hidden = !isEmpty;
   clearCartButton.disabled = isEmpty;
-  cartCount.textContent = String(getCartQuantity(cart));
-  cartTotal.textContent = formatPrice(getCartTotal(cart));
+  const total = getCartTotal(cart);
+
+  cartTotalHeader.textContent = formatPrice(total);
+  cartTotal.textContent = formatPrice(total);
 
   cart.forEach((item) => {
     cartItemsContainer.appendChild(renderCartItem(item));

@@ -49,8 +49,8 @@ http://localhost:5173
 Tambien se puede ingresar directamente a:
 
 ```text
-http://localhost:5173/src/pages/store/home/home.html
-http://localhost:5173/src/pages/store/cart/cart.html
+http://localhost:5173/store/menu
+http://localhost:5173/store/cart
 ```
 
 ## Build
@@ -61,7 +61,7 @@ Para generar la version de produccion:
 pnpm build
 ```
 
-Las paginas del parcial estan registradas en `vite.config.ts` dentro de `build.rollupOptions.input`.
+Las paginas del parcial estan registradas en `vite.config.ts` dentro de `build.rollupOptions.input`. Los archivos se mantienen en `src/pages/store/` como pide la consigna, y Vite agrega aliases limpios para `/store/menu` y `/store/cart`.
 
 ## Estructura principal
 

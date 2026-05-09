@@ -9,18 +9,21 @@
     const savedTheme = localStorage.getItem("foodStoreTheme");
     document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
   </script>
-  <link rel="stylesheet" href="../../../style.css" />
+  <link rel="stylesheet" href="/src/style.css" />
 </head>
 
 <body>
   <header class="store-header">
-    <a class="brand" href="../home/home.html" aria-label="Food Store">
+    <a class="brand" href="/store/menu" aria-label="Food Store">
       <span class="brand-mark">FS</span>
       <span>Food Store</span>
     </a>
     <nav class="store-nav" aria-label="Navegacion principal">
-      <a href="../home/home.html">Catalogo</a>
-      <a class="cart-link" href="./cart.html" aria-current="page">Carrito <span id="cartCount">0</span></a>
+      <a href="/store/menu">Catalogo</a>
+      <a class="cart-link" href="/store/cart" aria-current="page" aria-label="Ver carrito">
+        <span class="cart-icon" aria-hidden="true">&#128722;</span>
+        <span id="cartTotalHeader" class="cart-link-total">$ 0</span>
+      </a>
       <label class="theme-switch" aria-label="Cambiar tema">
         <input id="themeToggle" type="checkbox" />
         <span class="theme-switch-track" aria-hidden="true">
@@ -39,7 +42,7 @@
           <p class="eyebrow">Resumen</p>
           <h1 id="cartTitle">Carrito de compras</h1>
         </div>
-        <a class="secondary-button" href="../home/home.html">Seguir comprando</a>
+        <a class="secondary-button" href="/store/menu">Seguir comprando</a>
       </div>
 
       <div id="cartItems" class="cart-items"></div>
@@ -53,7 +56,7 @@
     </aside>
   </main>
 
-  <script type="module" src="./cart.ts"></script>
+  <script type="module" src="/src/pages/store/cart/cart.ts"></script>
 </body>
 
 </html>

@@ -9,18 +9,21 @@
     const savedTheme = localStorage.getItem("foodStoreTheme");
     document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
   </script>
-  <link rel="stylesheet" href="../../../style.css" />
+  <link rel="stylesheet" href="/src/style.css" />
 </head>
 
 <body>
   <header class="store-header">
-    <a class="brand" href="./home.html" aria-label="Food Store">
+    <a class="brand" href="/store/menu" aria-label="Food Store">
       <span class="brand-mark">FS</span>
       <span>Food Store</span>
     </a>
     <nav class="store-nav" aria-label="Navegacion principal">
-      <a href="./home.html" aria-current="page">Catalogo</a>
-      <a class="cart-link" href="../cart/cart.html">Carrito <span id="cartCount">0</span></a>
+      <a href="/store/menu" aria-current="page">Catalogo</a>
+      <a class="cart-link" href="/store/cart" aria-label="Ver carrito">
+        <span class="cart-icon" aria-hidden="true">&#128722;</span>
+        <span id="cartTotalHeader" class="cart-link-total">$ 0</span>
+      </a>
       <label class="theme-switch" aria-label="Cambiar tema">
         <input id="themeToggle" type="checkbox" />
         <span class="theme-switch-track" aria-hidden="true">
@@ -70,7 +73,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script type="module" src="./home.ts"></script>
+  <script type="module" src="/src/pages/store/home/home.ts"></script>
 </body>
 
 </html>

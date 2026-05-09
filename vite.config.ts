@@ -1,7 +1,56 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
+import { readFileSync } from "fs";
+
+const storeRouteAliases = () => {
+  const devRoutes: Record<string, string> = {
+    "/store/menu": resolve(__dirname, "src/pages/store/home/home.html"),
+    "/store/cart": resolve(__dirname, "src/pages/store/cart/cart.html"),
+  };
+
+  const previewRoutes: Record<string, string> = {
+    "/store/menu": resolve(__dirname, "dist/src/pages/store/home/home.html"),
+    "/store/cart": resolve(__dirname, "dist/src/pages/store/cart/cart.html"),
+  };
+
+  return {
+    name: "store-route-aliases",
+    configureServer(server) {
+      server.middlewares.use(async (request, response, next) => {
+        const route = request.url?.split("?")[0].replace(/\/$/, "") ?? "";
+        const filePath = devRoutes[route];
+
+        if (!filePath) {
+          next();
+          return;
+        }
+
+        const html = await server.transformIndexHtml(route, readFileSync(filePath, "utf-8"));
+        response.statusCode = 200;
+        response.setHeader("Content-Type", "text/html");
+        response.end(html);
+      });
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use((request, response, next) => {
+        const route = request.url?.split("?")[0].replace(/\/$/, "") ?? "";
+        const filePath = previewRoutes[route];
+
+        if (!filePath) {
+          next();
+          return;
+        }
+
+        response.statusCode = 200;
+        response.setHeader("Content-Type", "text/html");
+        response.end(readFileSync(filePath, "utf-8"));
+      });
+    },
+  };
+};
 
 export default defineConfig({
+  plugins: [storeRouteAliases()],
   build: {
     rollupOptions: {
       input: {

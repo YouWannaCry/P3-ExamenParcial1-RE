@@ -12,8 +12,8 @@
   <script>
     const path = window.location.pathname.toLowerCase()
     const fallbackUrl = path.includes('/cart/')
-      ? '/src/pages/store/cart/cart.html'
-      : '/src/pages/store/home/home.html'
+      ? '/store/cart'
+      : '/store/menu'
 
     if (window.location.pathname !== fallbackUrl) {
       window.location.replace(fallbackUrl)

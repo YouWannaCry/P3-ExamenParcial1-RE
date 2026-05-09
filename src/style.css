@@ -225,14 +225,16 @@ button:disabled {
   gap: 8px;
 }
 
-.cart-link span {
-  min-width: 28px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #d94f38;
-  color: #ffffff;
+.cart-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.cart-link-total {
+  min-width: 72px;
   text-align: center;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .store-shell,
@@ -492,13 +494,15 @@ h3 {
 }
 
 .product-footer {
+  align-items: stretch;
+  flex-direction: column;
   justify-content: space-between;
   gap: 12px;
 }
 
 .add-product-controls {
   display: grid;
-  grid-template-columns: minmax(78px, 92px) minmax(96px, auto);
+  grid-template-columns: minmax(70px, 86px) minmax(0, 1fr);
   gap: 8px;
   align-items: end;
 }
@@ -563,6 +567,10 @@ h3 {
 .primary-button {
   background: var(--accent);
   color: #ffffff;
+}
+
+.add-product-controls .primary-button {
+  width: 100%;
 }
 
 .primary-button:disabled {
@@ -745,11 +753,6 @@ h3 {
 
   h1 {
     font-size: 1.8rem;
-  }
-
-  .product-footer {
-    align-items: stretch;
-    flex-direction: column;
   }
 
   .catalog-actions {
