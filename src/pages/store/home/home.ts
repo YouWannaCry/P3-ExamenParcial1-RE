@@ -5,6 +5,7 @@ import { setupThemeToggle } from "../../../utils/theme";
 
 const productGrid = document.getElementById("productGrid") as HTMLDivElement;
 const categoryList = document.getElementById("categoryList") as HTMLDivElement;
+const categoryMenuButton = document.getElementById("categoryMenuButton") as HTMLButtonElement;
 const searchInput = document.getElementById("searchInput") as HTMLInputElement;
 const emptyMessage = document.getElementById("emptyMessage") as HTMLParagraphElement;
 const activeFilter = document.getElementById("activeFilter") as HTMLParagraphElement;
@@ -49,6 +50,18 @@ function getFilteredProducts(): Product[] {
   });
 }
 
+function closeCategoryMenu(): void {
+  categoryList.hidden = true;
+  categoryMenuButton.setAttribute("aria-expanded", "false");
+}
+
+function toggleCategoryMenu(): void {
+  const willOpen = categoryList.hidden;
+
+  categoryList.hidden = !willOpen;
+  categoryMenuButton.setAttribute("aria-expanded", String(willOpen));
+}
+
 function renderCategories(): void {
   const categories = getCategories();
 
@@ -60,6 +73,7 @@ function renderCategories(): void {
   allButton.textContent = "Todos";
   allButton.addEventListener("click", () => {
     selectedCategoryId = 0;
+    closeCategoryMenu();
     renderPage();
   });
   categoryList.appendChild(allButton);
@@ -72,69 +86,105 @@ function renderCategories(): void {
     button.textContent = category.nombre;
     button.addEventListener("click", () => {
       selectedCategoryId = category.id;
+      closeCategoryMenu();
       renderPage();
     });
     categoryList.appendChild(button);
   });
 }
 
-function renderProducts(products: Product[]): void {
+function createProductCard(product: Product): HTMLElement {
+  const cart = getCart();
+  const categoryName = product.categorias[0]?.nombre ?? "Sin categoria";
+  const cartQuantity = cart.find((item) => item.id === product.id)?.cantidad ?? 0;
+  const availableQuantity = Math.max(0, product.stock - cartQuantity);
+  const canAddProduct = product.disponible && availableQuantity > 0;
+  const card = document.createElement("article");
+  card.className = "product-card";
+
+  const badgeClass = canAddProduct ? "stock-badge" : "stock-badge is-disabled";
+  const buttonText = canAddProduct ? "Agregar" : "Sin stock";
+  const stockText = canAddProduct
+    ? `${availableQuantity} disponibles`
+    : product.disponible
+      ? "Stock agregado"
+      : "No disponible";
+
+  card.innerHTML = `
+    <div class="product-media">
+      <img src="${product.imagen}" alt="${product.nombre}" loading="lazy" />
+      <span>${categoryName.slice(0, 2).toUpperCase()}</span>
+    </div>
+    <div class="product-content">
+      <div>
+        <p class="product-category">${categoryName}</p>
+        <h3>${product.nombre}</h3>
+        <p>${product.descripcion}</p>
+      </div>
+      <div class="product-footer">
+        <div>
+          <strong>${formatPrice(product.precio)}</strong>
+          <span class="${badgeClass}">${stockText}</span>
+        </div>
+        <div class="add-product-controls">
+          <label for="quantity-${product.id}">Cantidad</label>
+          <input
+            id="quantity-${product.id}"
+            type="number"
+            min="1"
+            max="${availableQuantity}"
+            value="${canAddProduct ? 1 : 0}"
+            ${canAddProduct ? "" : "disabled"}
+            data-quantity-for="${product.id}"
+          />
+          <button class="primary-button" type="button" ${canAddProduct ? "" : "disabled"} data-product-id="${product.id}">
+            ${buttonText}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+function renderProductSections(products: Product[]): void {
   productGrid.innerHTML = "";
   emptyMessage.hidden = products.length > 0;
-  const cart = getCart();
 
-  products.forEach((product) => {
-    const categoryName = product.categorias[0]?.nombre ?? "Sin categoria";
-    const cartQuantity = cart.find((item) => item.id === product.id)?.cantidad ?? 0;
-    const availableQuantity = Math.max(0, product.stock - cartQuantity);
-    const canAddProduct = product.disponible && availableQuantity > 0;
-    const card = document.createElement("article");
-    card.className = "product-card";
+  const categories = getCategories().filter(
+    (category) => selectedCategoryId === 0 || category.id === selectedCategoryId
+  );
 
-    const badgeClass = canAddProduct ? "stock-badge" : "stock-badge is-disabled";
-    const buttonText = canAddProduct ? "Agregar" : "Sin stock";
-    const stockText = canAddProduct
-      ? `${availableQuantity} disponibles`
-      : product.disponible
-        ? "Stock agregado"
-        : "No disponible";
+  categories.forEach((category) => {
+    const productsByCategory = products.filter((product) =>
+      product.categorias.some((productCategory) => productCategory.id === category.id)
+    );
 
-    card.innerHTML = `
-      <div class="product-media">
-        <img src="${product.imagen}" alt="${product.nombre}" loading="lazy" />
-        <span>${categoryName.slice(0, 2).toUpperCase()}</span>
-      </div>
-      <div class="product-content">
+    if (productsByCategory.length === 0) {
+      return;
+    }
+
+    const section = document.createElement("section");
+    section.className = "category-section";
+    section.id = `category-${category.id}`;
+    section.innerHTML = `
+      <div class="category-section-heading">
         <div>
-          <p class="product-category">${categoryName}</p>
-          <h3>${product.nombre}</h3>
-          <p>${product.descripcion}</p>
+          <p class="eyebrow">${productsByCategory.length} productos</p>
+          <h2>${category.nombre}</h2>
         </div>
-        <div class="product-footer">
-          <div>
-            <strong>${formatPrice(product.precio)}</strong>
-            <span class="${badgeClass}">${stockText}</span>
-          </div>
-          <div class="add-product-controls">
-            <label for="quantity-${product.id}">Cantidad</label>
-            <input
-              id="quantity-${product.id}"
-              type="number"
-              min="1"
-              max="${availableQuantity}"
-              value="${canAddProduct ? 1 : 0}"
-              ${canAddProduct ? "" : "disabled"}
-              data-quantity-for="${product.id}"
-            />
-            <button class="primary-button" type="button" ${canAddProduct ? "" : "disabled"} data-product-id="${product.id}">
-              ${buttonText}
-            </button>
-          </div>
-        </div>
+        <p>${category.descripcion}</p>
       </div>
+      <div class="product-grid"></div>
     `;
 
-    productGrid.appendChild(card);
+    const sectionGrid = section.querySelector(".product-grid") as HTMLDivElement;
+    productsByCategory.forEach((product) => {
+      sectionGrid.appendChild(createProductCard(product));
+    });
+
+    productGrid.appendChild(section);
   });
 
   productGrid.querySelectorAll<HTMLButtonElement>("[data-product-id]").forEach((button) => {
@@ -193,8 +243,10 @@ function renderActiveFilter(): void {
 function renderPage(): void {
   renderCategories();
   renderActiveFilter();
-  renderProducts(getFilteredProducts());
+  renderProductSections(getFilteredProducts());
 }
+
+categoryMenuButton.addEventListener("click", toggleCategoryMenu);
 
 searchInput.addEventListener("input", () => {
   searchTerm = searchInput.value.trim();

@@ -5,6 +5,8 @@ Aplicacion frontend desarrollada con Vite y TypeScript para la Evaluacion 1 de P
 ## Funcionalidades
 
 - Catalogo de productos renderizado dinamicamente desde datos locales.
+- Catalogo organizado por secciones de categorias.
+- Menu hamburguesa con filtro de categoria de seleccion unica.
 - Imagenes fijas y representativas por categoria de producto.
 - Busqueda de productos por nombre.
 - Filtro por categorias.

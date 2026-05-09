@@ -33,28 +33,37 @@
   </header>
 
   <main class="store-shell">
-    <aside class="filters-panel" aria-label="Filtros de productos">
-      <div>
-        <p class="eyebrow">Categorias</p>
-        <h1>Catalogo</h1>
-      </div>
-      <div id="categoryList" class="category-list"></div>
-    </aside>
-
     <section class="catalog-section" aria-labelledby="catalogTitle">
       <div class="catalog-toolbar">
         <div>
           <p class="eyebrow">Productos disponibles</p>
-          <h2 id="catalogTitle">Elegidos de la casa</h2>
+          <h1 id="catalogTitle">Catalogo</h1>
         </div>
+        <div class="catalog-actions">
+          <div class="category-menu">
+            <button
+              id="categoryMenuButton"
+              class="icon-button"
+              type="button"
+              aria-expanded="false"
+              aria-controls="categoryList"
+              aria-label="Abrir categorias"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+            <div id="categoryList" class="category-list" hidden></div>
+          </div>
         <label class="search-control" for="searchInput">
           <span>Buscar</span>
           <input id="searchInput" type="search" autocomplete="off" placeholder="Pizza, hamburguesa..." />
         </label>
+        </div>
       </div>
 
       <p id="activeFilter" class="active-filter"></p>
-      <div id="productGrid" class="product-grid"></div>
+      <div id="productGrid" class="category-sections"></div>
       <p id="emptyMessage" class="empty-state" hidden>No se encontraron productos para la busqueda seleccionada.</p>
     </section>
   </main>
